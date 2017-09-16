@@ -1,6 +1,6 @@
 import json, requests, random, re
 from pprint import pprint
-
+from messenger.chat import chat_bot
 from django.views import generic
 from django.http.response import HttpResponse
 
@@ -11,12 +11,12 @@ from django.utils.decorators import method_decorator
 PAGE_ACCESS_TOKEN = ""
 VERIFY_TOKEN = ""
 
-jokes = { 'stupid': ["""Yo' Mama is so stupid, she needs a recipe to make ice cubes.""", 
-                     """Yo' Mama is so stupid, she thinks DNA is the National Dyslexics Association."""], 
-         'fat':      ["""Yo' Mama is so fat, when she goes to a restaurant, instead of a menu, she gets an estimate.""", 
-                      """ Yo' Mama is so fat, when the cops see her on a street corner, they yell, "Hey you guys, break it up!" """], 
-         'dumb': ["""Yo' Mama is so dumb, when God was giving out brains, she thought they were milkshakes and asked for extra thick.""", 
-                  """Yo' Mama is so dumb, she locked her keys inside her motorcycle."""] }
+link = { 'facebook': ["""www.facebook.com""", 
+                     """www.fb.com"""], 
+         'instagram':      ["""www.instagram.com""", 
+                      """www.instagram.com"""], 
+         'twitter': ["""www.twitter.com""", 
+                  """www.twitter.com"""] }
 
 # Helper function
 def post_facebook_message(fbid, recevied_message):
@@ -24,16 +24,19 @@ def post_facebook_message(fbid, recevied_message):
     tokens = re.sub(r"[^a-zA-Z0-9\s]",' ',recevied_message).lower().split()
     joke_text = ''
     for token in tokens:
-        if token in jokes:
-            joke_text = random.choice(jokes[token])
+        if token in link:
+            joke_text = random.choice(link[token])
             break
+    
+    
     if not joke_text:
-        joke_text = ".This is me dikshant chatter bot. Send 'stupid', 'fat', 'dumb' for a jokes!" 
+        joke_text=chat_bot(tokens)
 
+        
     user_details_url = "https://graph.facebook.com/v2.6/%s"%fbid 
     user_details_params = {'fields':'first_name,last_name,profile_pic', 'access_token':PAGE_ACCESS_TOKEN} 
     user_details = requests.get(user_details_url, user_details_params).json() 
-    joke_text = 'Yo '+user_details['first_name']+'..! ' + joke_text
+    joke_text = 'Hi '+user_details['first_name']+'..! ' + joke_text
                    
     post_message_url = 'https://graph.facebook.com/v2.6/me/messages?access_token=%s'%PAGE_ACCESS_TOKEN
     response_msg = json.dumps({"recipient":{"id":fbid}, "message":{"text":joke_text}})
@@ -43,7 +46,7 @@ def post_facebook_message(fbid, recevied_message):
 # Create your views here.
 class MessengerBotView(generic.View):
     def get(self, request, *args, **kwargs):
-        if self.request.GET['hub.verify_token'] == VERIFY_TOKEN:
+        if self.request.GET["hub.verify_token"] == VERIFY_TOKEN:
             return HttpResponse(self.request.GET['hub.challenge'])
         else:
             return HttpResponse('Error, invalid token')

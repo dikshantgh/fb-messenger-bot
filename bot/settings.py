@@ -25,7 +25,7 @@ SECRET_KEY = '18ki-fc0llskr5qj3mg$(nszipu&1ulo+@n4(n&17!!%q-(+%w'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['511a2544.ngrok.io','127.0.0.1']
+ALLOWED_HOSTS = ['511a2544.ngrok.io','127.0.0.1','d3975ed6.ngrok.io']
 
 
 # Application definition
@@ -100,13 +100,13 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
+DATE_INPUT_FORMATS = ('%d-%m-%Y')
 # Internationalization
 # https://docs.djangoproject.com/en/1.11/topics/i18n/
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Asia/Kathmandu'
 
 USE_I18N = True
 
