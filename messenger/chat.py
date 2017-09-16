@@ -6,7 +6,8 @@ def chat_bot(tokens):
 	if 'who' in tokens:
 		return "i am dikshant's creation"
 
-	if "hello" in tokens or "hi" in tokens:		return ".This is me dikshant's chatter bot. I'am at testing phase. Currently Dikshant is unavailable. So, type 'facebook', 'twitter', or 'instagram' for links!" 
+	if "hello" in tokens or "hi" in tokens:		
+		return ".This is me dikshant's chatter bot. I'am at testing phase. Currently Dikshant is unavailable. So, type 'facebook', 'twitter', or 'instagram' for links!" 
 
 	if 'time' in tokens:
 		return (str(datetime.now())[:16])
